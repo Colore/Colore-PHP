@@ -110,6 +110,14 @@ class ColoreRequest {
 	}
 
 	/**
+	 * Get the context's rendering properties.
+	 * @return array Returns an array with all the rendering properties.
+	 */
+	public function getContextRenderProperties() {
+		return $this->_context['render']['properties'];
+	}
+	
+	/**
 	 * Gets an array containing all of the rendering properties.
 	 * @return array
 	 */
@@ -274,14 +282,6 @@ class ColoreRequest {
 	 */
 	public function setRenderEngine( $renderEngine ) {
 		$this->_context['render']['engine'] = $renderEngine;
-	}
-
-	/**
-	 * Get the rendering properties.
-	 * @return array Returns an array with all the rendering properties.
-	 */
-	public function getRenderProperties() {
-		return $this->_context['render']['properties'];
 	}
 
 	/**
