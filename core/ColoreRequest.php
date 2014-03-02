@@ -64,7 +64,7 @@ class ColoreRequest {
 	 * @param string $requestArgumentName
 	 * @return multitype:|NULL
 	 */
-	public function getRequestArgument( string $requestArgumentName ) {
+	public function getRequestArgument( $requestArgumentName ) {
 		if( isset( $this->_requestArguments[$requestArgumentName] ) )
 			return $this->_requestArguments[$requestArgumentName];
 
@@ -76,7 +76,7 @@ class ColoreRequest {
 	 * @param string $requestArgument
 	 * @param mixed $requestArgumentValue
 	 */
-	public function setRequestArgument( string $requestArgument, mixed $requestArgumentValue ) {
+	public function setRequestArgument( $requestArgument, $requestArgumentValue ) {
 		$this->_requestArguments[$requestArgument] = $requestArgumentValue;
 	}
 
@@ -93,7 +93,7 @@ class ColoreRequest {
 	 * @param string $requestProperty
 	 * @return multitype:|NULL
 	 */
-	public function getRequestProperty( string $requestProperty ) {
+	public function getRequestProperty( $requestProperty ) {
 		if( isset( $this->_requestProperties[$requestProperty] ) )
 			return $this->_requestProperties[$requestProperty];
 
@@ -105,7 +105,7 @@ class ColoreRequest {
 	 * @param string $requestProperty
 	 * @param string $requestValue
 	 */
-	public function setRequestProperty( string $requestProperty, string $requestValue ) {
+	public function setRequestProperty( $requestProperty, $requestValue ) {
 		$this->_requestProperties[$requestProperty] = $requestValue;
 	}
 
@@ -130,7 +130,7 @@ class ColoreRequest {
 	 * @param string $renderProperty
 	 * @return multitype:|NULL 
 	 */
-	public function getRenderProperty( string $renderProperty ) {
+	public function getRenderProperty( $renderProperty ) {
 		if( isset( $this->_renderProperties[$renderProperty] ) )
 			return $this->_renderProperties[$renderProperty];
 
@@ -142,7 +142,7 @@ class ColoreRequest {
 	 * @param string $renderProperty
 	 * @param mixed $renderValue
 	 */
-	public function setRenderProperty( string $renderProperty, mixed $renderValue ) {
+	public function setRenderProperty( $renderProperty, $renderValue ) {
 		if( LOGLEVEL & LOG_DEBUG ) @error_log( sprintf( "%s: Set [%s] to [%s]", __METHOD__, $renderProperty, $renderValue ) );
 		$this->_renderProperties[$renderProperty] = $renderValue;
 	}
@@ -172,7 +172,7 @@ class ColoreRequest {
 	 * @param string $sessionProperty
 	 * @param mixed $sessionValue
 	 */
-	public function setSessionProperty( string $sessionProperty, $sessionValue ) {
+	public function setSessionProperty( $sessionProperty, $sessionValue ) {
 		$_sessionProperties[$sessionProperty] = $sessionValue;
 	}
 
@@ -180,7 +180,7 @@ class ColoreRequest {
 	 * Sets a session property.
 	 * @param string $sessionProperty
 	 */
-	public function unsetSessionProperty( string $sessionProperty ) {
+	public function unsetSessionProperty( $sessionProperty ) {
 		if( isset( $_sessionProperties[$sessionProperty] ) )
 			unset( $_sessionProperties[$sessionProperty] );
 	}

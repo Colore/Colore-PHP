@@ -6,7 +6,7 @@ class ColoreEngine {
 	private $_config = array();
 	private $_helpers = array();
 
-	public function __construct( array $coloreConfig ) {
+	public function __construct() {
 		global $config;
 		
 		if( ! isset( $config['colore'] ) )
@@ -17,7 +17,7 @@ class ColoreEngine {
 	}
 	
 	public function Service() {
-		
+
 		$contextHelper = $this->Factory( $this->_config['helpers']['context'], 'ColoreContextHelper' );
 		
 		if( ! $contextHelper )
@@ -141,7 +141,7 @@ class ColoreEngine {
 
 	}
 
-	public function Factory( string $className, string $classInterface ) {
+	public function Factory( $className, $classInterface ) {
 
 		if( LOGLEVEL & LOG_DEBUG )
 			error_log( sprintf( "%s: [%s]", __METHOD__, $className ) );

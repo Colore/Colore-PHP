@@ -31,7 +31,7 @@ class ColoreApachePHPRequestHelper extends ColoreRequest implements ColoreReques
 	 * @param string $requestArgumentName
 	 * @return multitype:|NULL
 	 */
-	public function getRequestArgument( string $requestArgumentName ) {
+	public function getRequestArgument( $requestArgumentName ) {
 		if( isset( $_GET[$requestArgumentName] ) )
 			return $_GET[$requestArgumentName];
 	
@@ -43,7 +43,7 @@ class ColoreApachePHPRequestHelper extends ColoreRequest implements ColoreReques
 	 * @param string $requestArgument
 	 * @param mixed $requestArgumentValue
 	 */
-	public function setRequestArgument( string $requestArgument, mixed $requestArgumentValue ) {
+	public function setRequestArgument( $requestArgument, $requestArgumentValue ) {
 		/**
 		 * We don't want to inject data into the _GET variable.
 		 */
@@ -62,7 +62,7 @@ class ColoreApachePHPRequestHelper extends ColoreRequest implements ColoreReques
 	 * @param string $requestProperty
 	 * @return multitype:|NULL
 	 */
-	public function getRequestProperty( string $requestProperty ) {
+	public function getRequestProperty( $requestProperty ) {
 		if( isset( $_POST[$requestProperty] ) )
 			return $_POST[$requestProperty];
 	
@@ -72,9 +72,9 @@ class ColoreApachePHPRequestHelper extends ColoreRequest implements ColoreReques
 	/**
 	 * Sets a request property.
 	 * @param string $requestProperty
-	 * @param string $requestValue
+	 * @param mixed $requestValue
 	 */
-	public function setRequestProperty( string $requestProperty, string $requestValue ) {
+	public function setRequestProperty( $requestProperty, $requestValue ) {
 		/**
 		 * We don't want to inject data into the _POST variable.
 		 */
@@ -105,7 +105,7 @@ class ColoreApachePHPRequestHelper extends ColoreRequest implements ColoreReques
 	 * @param string $sessionProperty
 	 * @param mixed $sessionValue
 	 */
-	public function setSessionProperty( string $sessionProperty, $sessionValue ) {
+	public function setSessionProperty( $sessionProperty, $sessionValue ) {
 		$_SESSION[$sessionProperty] = $sessionValue;
 	}
 	
@@ -113,7 +113,7 @@ class ColoreApachePHPRequestHelper extends ColoreRequest implements ColoreReques
 	 * Sets a session property.
 	 * @param string $sessionProperty
 	 */
-	public function unsetSessionProperty( string $sessionProperty ) {
+	public function unsetSessionProperty( $sessionProperty ) {
 		if( isset( $_SESSION[$sessionProperty] ) )
 			unset( $_SESSION[$sessionProperty] );
 	}
