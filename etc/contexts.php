@@ -9,8 +9,10 @@ $config['contexts']['default'] = array(
 	),
 	'render' => array(
 		'engine' => 'Render_Simple',
-		'path' => 'home.php',
+		'path' => 'default.php',
 		'properties' => array(
+			'page_title' => 'Example',
+			'place_holder_message' => 'Welcome to the Colore example page!',
 		),
 	),
 );
@@ -21,9 +23,11 @@ $config['contexts']['error'] = array(
 	'logic' => array(
 	),
 	'render' => array(
-		'engine' => 'Render_Smarty',
+		'engine' => 'Render_Simple',
 		'path' => 'error.php',
 		'properties' => array(
+			'page_title' => 'Error',
+			'error_message' => 'Placeholder error message',
 		),
 	),
 );

@@ -4,24 +4,18 @@ class Render_Simple implements ColoreRenderHelper {
 
 	private $_defaults = array();
 
-	public function __construct() {
-	}
-
 	public function Dispatch( ColoreRequestHelper &$cro ) {
 		global $config;
 
-		$this->_defaults = $config['defaults']['render'];
-
-		$smarty = new Smarty();
+		$defaults = $config['defaults']['render'];
 
 		$template = $cro->getRenderPath();
+		$template_file = sprintf( "%s/templates/%s", BASEDIR, $template );
 
-		$smarty->clearAllAssign();
-
-		$defaultProperties = $this->_defaults['properties'];
+		$defaultProperties = $defaults['properties'];
 
 		while( list( $propName, $propVal ) = each( $defaultProperties ) ) {
-			$smarty->assign( $propName, $propVal );
+			$_GLOBALS[$propName] = $propVal;
 		}
 
 		$renderProperties = $cro->getRenderProperties();
@@ -31,11 +25,10 @@ class Render_Simple implements ColoreRenderHelper {
 		while( list( $propName, $propVal ) = each( $renderProperties ) ) {
 			if( LOGLEVEL & LOG_DEBUG )
 				@error_log( sprintf( "%s: Setting render property [%s] to [%s]", __METHOD__, $propName, $propVal ) );
-			$smarty->assign( $propName, $propVal );
+			$_GLOBALS[$propName] = $propVal;
 		}
 
-		$smarty->display( $template );
-
+		require_once( $template_file );
 	}
 
 }
