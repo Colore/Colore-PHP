@@ -2,7 +2,7 @@
 
 $config['contexts'] = array();
 
-$config['contexts']['/ping'] = array(
+$config['contexts']['ping'] = array(
 	'properties' => array(
 	),
 	'logic' => array(
