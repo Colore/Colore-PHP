@@ -22,7 +22,7 @@ function DoPing() {
 </head>
 <body>
 	<?=$template['place_holder_message']?><br />
-	You called <?=$template['context']?>.<br />
+	You called &quot;<?=$template['context']?>&quot;.<br />
 	Ping: <input type="text" id="pingText" value="test" size="64" length="64"/><br />
 	Result: <input type="text" disabled id="pingResult" size="64" length="64"/><br />
 	<button onclick="DoPing();">Ping</button>
