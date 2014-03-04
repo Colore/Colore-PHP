@@ -198,26 +198,24 @@ class ColoreRequest {
 	 * @param array $contextData
 	 */
 	public function loadContext( $contextData ) {
-		global $config;
-		
 		// Save context name
-		$this->_contextName = $contextName;
+		$this->_contextName = $contextData['name'];
 
 		// Load context information
-		$this->_context = $config['contexts'][$contextName];
+		$this->_context = $contextData;
 		
 		$this->_exceptionState = false;
 		
-		if( isset( $this->_context['render']['arguments'] ) && is_array( $this->_context['render']['arguments'] ) ) {
+		if( isset( $this->_context['render']['properties'] ) && is_array( $this->_context['render']['properties'] ) ) {
 			if( LOGLEVEL & LOG_DEBUG )
 				error_log( sprintf( "%s: %s", __METHOD__, "We have render arguments" ) );
-			reset( $this->_context['render']['arguments'] );
-			while( list( $renderProperty, $renderValue ) = each( $this->_context['render']['arguments'] ) ) {
+			reset( $this->_context['render']['properties'] );
+			while( list( $renderProperty, $renderValue ) = each( $this->_context['render']['properties'] ) ) {
 				if( LOGLEVEL & LOG_DEBUG )
 					@error_log( sprintf( "%s: Set [%s] to [%s]", __METHOD__, $renderProperty, (string) $renderValue ) );
 				$this->setRenderProperty( $renderProperty, $renderValue );
 			}
-			reset( $this->_context['render']['arguments'] );
+			reset( $this->_context['render']['properties'] );
 		} else {
 			if( LOGLEVEL & LOG_DEBUG )
 				error_log( sprintf( "%s: %s", __METHOD__, "No render arguments" ) );
@@ -248,7 +246,9 @@ class ColoreRequest {
 	 * @return mixed Logic element
 	 */
 	public function getNextLogic() {
-		return array_shift( $this->_context['logic'] );
+		if( count( $this->_context['logic'] ) > 0 )
+			return array_shift( $this->_context['logic'] );
+		return false;
 	}
 	
 	/**

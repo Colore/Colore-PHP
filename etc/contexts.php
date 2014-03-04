@@ -2,6 +2,21 @@
 
 $config['contexts'] = array();
 
+$config['contexts']['/ping'] = array(
+	'properties' => array(
+	),
+	'logic' => array(
+		array( 'class' => 'Ping', 'method' => 'Reply' ),
+	),
+	'render' => array(
+		'engine' => 'Render_JSON',
+		'path' => '',
+		'properties' => array(
+			'message' => 'Default context render property.',
+		),
+	),
+);
+
 $config['contexts']['default'] = array(
 	'properties' => array(
 	),

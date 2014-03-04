@@ -5,12 +5,7 @@ class Render_JSON implements ColoreRenderHelper {
 	private $_defaults = array();
 
 	public function Dispatch( ColoreRequestHelper &$cro ) {
-
-		global $config;
-
-		$this->_defaults = $config['defaults']['render'];
-
-		$outputProperties = $this->_defaults['properties'];
+		$outputProperties = array();
 
 		$renderProperties = $cro->getRenderProperties();
 
@@ -24,8 +19,7 @@ class Render_JSON implements ColoreRenderHelper {
 
 		header( 'Content-Type: application/json' );
 		
-		json_encode( $outputProperties );
-
+		echo json_encode( $outputProperties );
 	}
 
 }
