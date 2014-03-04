@@ -14,6 +14,9 @@ class ColoreApachePHPRequestHelper extends ColoreRequest implements ColoreReques
 		}
 
 		$context = addslashes( $context );
+		
+		if( substr( $context, 0, 1 ) == '/' )
+			$context = substr( $context, 1 );
 
 		return $context;
 	}
