@@ -8,9 +8,9 @@ class ColoreApachePHPRequestHelper extends ColoreRequest implements ColoreReques
 		if( isset( $_SERVER['PATH_INFO'] ) && ! empty( $_SERVER['PATH_INFO'] ) ) {
 			$context = $_SERVER['PATH_INFO'];
 		} elseif( isset( $_SERVER['REDIRECT_URL'] ) && ! empty( $_SERVER['REDIRECT_URL'] ) ) {
-			$context = str_replace( $baseURL, '', $_SERVER['REDIRECT_URL'] );
+			$context = substr( $_SERVER['REDIRECT_URL'], strlen( $baseURL ) );
 		} else {
-			$context = str_replace( $baseURL, '', $_SERVER['REQUEST_URI'] );
+			$context = substr( $_SERVER['REQUEST_URI'], strlen( $baseURL ) );
 		}
 		
 		$context = addslashes( $context );
