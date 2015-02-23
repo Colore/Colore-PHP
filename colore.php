@@ -37,7 +37,8 @@ while( list( , $init_dir ) = each( $init_dirs ) ) {
 		/**
 		 * Iterate over the files.
 		 */
-		while( ( $file = readdir( $dh ) ) !== false ) {
+		$init_files = scandir( $init_dir );
+		foreach( $init_files as $file ) {
 			/**
 			 * If we find a PHP file, then construct the path and require_once it.
 			 */
