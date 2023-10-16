@@ -1,0 +1,109 @@
+{
+    "colore": {
+        "defaults": {
+            "contexts": {
+                "default": "default",
+                "error": "error"
+            },
+            "render": {
+                "properties": []
+            }
+        },
+        "helpers": {
+            "context": "\\Colore\\Helpers\\PHPContextHelper",
+            "request": "\\Colore\\Helpers\\ApachePHPRequestHelper"
+        }
+    },
+    "contexts": {
+        "/api/joke/random": {
+            "properties": [],
+            "logic": [
+                {
+                    "class": "\\Colore\\Examples\\Ping\\JokeExample",
+                    "method": "randomJoke"
+                }
+            ],
+            "render": {
+                "engine": "\\Colore\\Renderers\\HTTPJSON",
+                "path": "",
+                "properties": {
+                    "joke": "I'd tell you a UDP joke, but you wouldn't get."
+                }
+            }
+        },
+        "/api/joke": {
+            "properties": [],
+            "logic": [
+                {
+                    "class": "\\Colore\\Examples\\Ping\\JokeExample",
+                    "method": "getJoke"
+                }
+            ],
+            "render": {
+                "engine": "\\Colore\\Renderers\\HTTPJSON",
+                "path": "",
+                "properties": {
+                    "joke": "I'd tell you a UDP joke, but you wouldn't get."
+                }
+            }
+        },
+        "/api/ping": {
+            "properties": [],
+            "logic": [
+                {
+                    "class": "\\Colore\\Examples\\Ping\\PingExample",
+                    "method": "reply"
+                }
+            ],
+            "render": {
+                "engine": "\\Colore\\Renderers\\HTTPJSON",
+                "path": "",
+                "properties": {
+                    "message": "Default context render property."
+                }
+            }
+        },
+        "/api/trunk": {
+            "properties": [],
+            "logic": [
+                {
+                    "class": "\\Colore\\Examples\\Ping\\JokeExample",
+                    "method": "randomJoke"
+                },
+                {
+                    "class": "\\Colore\\Examples\\Ping\\PingExample",
+                    "method": "reply"
+                }
+            ],
+            "render": {
+                "engine": "\\Colore\\Renderers\\HTTPJSON",
+                "path": "",
+                "properties": {}
+            }
+        },
+        "default": {
+            "properties": [],
+            "logic": [],
+            "render": {
+                "engine": "\\Colore\\Renderers\\SimpleOutput",
+                "path": "templates/default.php",
+                "properties": {
+                    "page_title": "Example",
+                    "place_holder_message": "Welcome to the Colore example page!"
+                }
+            }
+        },
+        "error": {
+            "properties": [],
+            "logic": [],
+            "render": {
+                "engine": "\\Colore\\Renderers\\SimpleOutput404",
+                "path": "templates/error.php",
+                "properties": {
+                    "page_title": "Error",
+                    "error_message": "Sorry, we didn't find the page you requested!"
+                }
+            }
+        }
+    }
+}
