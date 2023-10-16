@@ -21,5 +21,6 @@
     "php-cs-fixer.autoFixByBracket": true,
     "php-cs-fixer.autoFixBySemicolon": true,
     "php-cs-fixer.formatHtml": false,
-    "php-cs-fixer.documentFormattingProvider": true
+    "php-cs-fixer.documentFormattingProvider": true,
+    "shellformat.useEditorConfig": true
 }
