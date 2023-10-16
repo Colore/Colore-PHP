@@ -63,6 +63,24 @@
                 }
             }
         },
+        "/api/trunk": {
+            "properties": [],
+            "logic": [
+                {
+                    "class": "\\Colore\\Examples\\Ping\\JokeExample",
+                    "method": "randomJoke"
+                },
+                {
+                    "class": "\\Colore\\Examples\\Ping\\PingExample",
+                    "method": "reply"
+                }
+            ],
+            "render": {
+                "engine": "\\Colore\\Renderers\\HTTPJSON",
+                "path": "",
+                "properties": {}
+            }
+        },
         "default": {
             "properties": [],
             "logic": [],
