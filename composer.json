@@ -1,18 +1,24 @@
 {
+    "name": "colore/colore-php",
+    "description": "The PHP implementation of the Colore framework/pattern",
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.35"
+        "friendsofphp/php-cs-fixer": "^3.35",
+        "smarty/smarty": "^4.3"
     },
     "autoload": {
         "psr-4": {
-            "Colore\\": "src/",
-            "Colore\\Examples\\Ping\\": "examples/ping/src/"
+            "Colore\\": "src/"
         },
         "classmap": [
-            "examples/**",
             "src/**"
         ]
     },
-    "require": {
-        "smarty/smarty": "^4.3"
+    "autoload-dev": {
+        "psr-4": {
+            "Colore\\Examples\\Ping\\": "examples/ping/src/"
+        },
+        "classmap": [
+            "examples/**"
+        ]
     }
 }
