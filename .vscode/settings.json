@@ -6,7 +6,7 @@
     "[php]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.codeActionsOnSave": {
-            // "source.fixAll.intelephense": true,
+            "source.fixAll.intelephense": true,
             "source.fixAll.php-cs-fixer": true,
             "source.fixAll.phpcsfixer": true,
             "source.fixAll.prettier": true,
@@ -24,6 +24,9 @@
     "php-cs-fixer.documentFormattingProvider": true,
     "shellformat.useEditorConfig": true,
     "intelephense.environment.includePaths": [
+        "vendor/openswoole/ide-helper",
+        "examples",
+        "src",
         "vendor"
     ]
 }
