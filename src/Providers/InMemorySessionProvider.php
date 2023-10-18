@@ -37,7 +37,7 @@ class InMemorySessionProvider {
     }
 
     public static function getSession($sessionId = null): self {
-        Logger::debug('sessionId: %s', $sessionId);
+        Logger::debug('sessionId: %s', $sessionId ?? 'null');
 
         if (self::$gcLastRun < time()) {
             self::$gcLastRun += self::$gcInterval;
