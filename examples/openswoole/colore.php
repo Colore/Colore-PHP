@@ -34,9 +34,7 @@ $server->on('Start', function (Server $server) {
     echo "OpenSwoole http server is started at http://0.0.0.0:9501\n";
 });
 
-$server->on('Request', function (Request $request, Response $response) {
-    global $colore;
-
+$server->on('Request', function (Request $request, Response $response) use ($colore) {
     call_user_func_array([$colore, 'service'], [&$request, &$response]);
 });
 

@@ -6,4 +6,4 @@ docker run \
     -p 9501:9501 \
     -v $(pwd):/colore \
     openswoole/swoole \
-    $@
+    /colore/examples/openswoole/server.php

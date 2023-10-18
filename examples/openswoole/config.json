@@ -17,7 +17,7 @@
                         "properties": [],
                         "logic": [
                             {
-                                "class": "\\Colore\\Examples\\Ping\\JokeExample",
+                                "class": "\\Colore\\Examples\\OpenSwoole\\JokeExample",
                                 "method": "randomJoke"
                             }
                         ],
@@ -33,7 +33,7 @@
                         "properties": [],
                         "logic": [
                             {
-                                "class": "\\Colore\\Examples\\Ping\\JokeExample",
+                                "class": "\\Colore\\Examples\\OpenSwoole\\JokeExample",
                                 "method": "getJoke"
                             }
                         ],
@@ -49,7 +49,7 @@
                         "properties": [],
                         "logic": [
                             {
-                                "class": "\\Colore\\Examples\\Ping\\PingExample",
+                                "class": "\\Colore\\Examples\\OpenSwoole\\PingExample",
                                 "method": "reply"
                             }
                         ],
@@ -65,11 +65,11 @@
                         "properties": [],
                         "logic": [
                             {
-                                "class": "\\Colore\\Examples\\Ping\\JokeExample",
+                                "class": "\\Colore\\Examples\\OpenSwoole\\JokeExample",
                                 "method": "randomJoke"
                             },
                             {
-                                "class": "\\Colore\\Examples\\Ping\\PingExample",
+                                "class": "\\Colore\\Examples\\OpenSwoole\\PingExample",
                                 "method": "reply"
                             }
                         ],
