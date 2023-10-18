@@ -6,22 +6,21 @@
         "smarty/smarty": "^4.3",
         "openswoole/core": "22.1.2",
         "vimeo/psalm": "^5.15",
-        "ramsey/uuid": "^4.7"
+        "ramsey/uuid": "^4.7",
+        "openswoole/ide-helper": "~22.0.1"
     },
     "autoload": {
         "psr-4": {
             "Colore\\": "src/"
         },
-        "classmap": [
-            "src/**"
+        "files": [
+            "src/Constants.php"
         ]
     },
     "autoload-dev": {
         "psr-4": {
+            "Colore\\Examples\\OpenSwoole\\": "examples/openswoole/src/",
             "Colore\\Examples\\Ping\\": "examples/ping/src/"
-        },
-        "classmap": [
-            "examples/**"
-        ]
+        }
     }
 }
