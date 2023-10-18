@@ -1,15 +1,19 @@
 <?php
 
-namespace Colore\Renderers;
+namespace Colore\Renderers\HTTP;
 
 use Colore\Logger;
-use Colore\Interfaces\RequestHelper;
-use Colore\Interfaces\RenderHelper;
+use Colore\Interfaces\Adapters\IRequestAdapter;
+use Colore\Interfaces\Providers\IRenderProvider;
 
-class HTTPRedirect implements RenderHelper {
-    public function dispatch(RequestHelper &$cro) {
+class HTTPRedirectRenderer implements IRenderProvider {
+    /**
+     * @return void
+     */
+    public function dispatch(IRequestAdapter &$cro) {
         // Get the redirect path
         $redirectPath = $cro->getRenderPath();
+
         Logger::debug('redirectPath: [%s]', $redirectPath);
 
         // If not fully qualified URL, then prepend baseURL
@@ -31,13 +35,10 @@ class HTTPRedirect implements RenderHelper {
             $redirectURL = $redirectPath;
         }
 
-        // Construct header line
-        $headerLine = sprintf('Location: %s', $redirectURL);
-
         // Log header line
-        Logger::debug('Redirecting to: [%s]', $headerLine);
+        Logger::debug('Redirecting to: [%s]', $redirectURL);
 
         // Send http header
-        header($headerLine);
+        $cro->output('', ['Location' => $redirectURL], 308);
     }
 }

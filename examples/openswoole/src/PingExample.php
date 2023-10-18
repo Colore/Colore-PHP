@@ -1,6 +1,6 @@
 <?php
 
-namespace Colore\Examples\Ping;
+namespace Colore\Examples\OpenSwoole;
 
 use Colore\Interfaces\Adapters\IRequestAdapter;
 

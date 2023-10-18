@@ -3,18 +3,20 @@
 namespace Colore\Renderers;
 
 use Colore\Logger;
-use Colore\Interfaces\RequestHelper;
-use Colore\Interfaces\RenderHelper;
+use Colore\Interfaces\Adapters\IRequestAdapter;
+use Colore\Interfaces\Providers\IRenderProvider;
 
-class SimpleOutput404 implements RenderHelper {
-    public function dispatch(RequestHelper &$cro) {
+class HTTPOutputSimpleTemplate implements IRenderProvider {
+    /**
+     * @return void
+     */
+    public function dispatch(IRequestAdapter &$cro) {
         $template = $cro->getRenderPath();
         $template_file = sprintf('%s/%s', BASEDIR, $template);
 
         $renderProperties = $cro->getRenderProperties();
 
         // Hold the variable in the template variable.
-        $template = [];
 
         Logger::debug('Setting render properties [%d]', count($renderProperties));
 
@@ -26,8 +28,14 @@ class SimpleOutput404 implements RenderHelper {
 
         $template['context'] = $cro->getContextKey();
 
-        http_response_code(404);
+        ob_start();
 
         require_once $template_file; // NOSONAR
+
+        $ob = ob_get_contents();
+
+        ob_end_clean();
+
+        $cro->output($ob);
     }
 }

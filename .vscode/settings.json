@@ -22,5 +22,8 @@
     "php-cs-fixer.autoFixBySemicolon": true,
     "php-cs-fixer.formatHtml": false,
     "php-cs-fixer.documentFormattingProvider": true,
-    "shellformat.useEditorConfig": true
+    "shellformat.useEditorConfig": true,
+    "intelephense.environment.includePaths": [
+        "vendor"
+    ]
 }

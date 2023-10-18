@@ -110,6 +110,6 @@
                 }
             }
         },
-        "request": "\\Colore\\Adapters\\ApachePHPRequestAdapter"
+        "request": "\\Colore\\Adapters\\OpenSwooleRequestAdapter"
     }
 }

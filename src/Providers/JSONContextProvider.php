@@ -1,11 +1,14 @@
 <?php
 
-namespace Colore\Helpers;
+namespace Colore\Providers;
 
 use Colore\Logger;
-use Colore\Interfaces\ContextHelper;
+use Colore\Interfaces\Providers\IContextProvider;
 
-class JSONContextHelper implements ContextHelper {
+class JSONContextProvider implements IContextProvider {
+    /**
+     * @return void
+     */
     public function resolveContext($contextKey) {
         /**
          * We generate the filename using basename to strip off any unwanted directory insertions,

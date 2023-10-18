@@ -108,6 +108,7 @@ return (new PhpCsFixer\Config())
         'space_after_semicolon' => true,
         'single_blank_line_at_eof' => true,
         'no_trailing_whitespace' => true,
+        'ternary_to_null_coalescing' => true
     ])
     ->setIndent('    ')
     ->setLineEnding("\n")

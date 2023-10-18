@@ -1,15 +1,14 @@
 <?php
 
-namespace Colore\Helpers;
+namespace Colore\Providers;
 
-use Colore\ConfigStore;
-use Colore\Interfaces\ContextHelper;
+use Colore\Interfaces\Providers\IContextProvider;
 
-class PHPRouteContextHelper implements ContextHelper {
+class PHPRouteContextProvider implements IContextProvider {
     protected $config;
 
-    public function __construct() {
-        $this->config = ConfigStore::getContextConfig();
+    public function __construct($config) {
+        $this->config = $config;
     }
 
     public function resolveContext($requested_context) {

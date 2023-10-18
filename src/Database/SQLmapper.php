@@ -9,7 +9,12 @@ define('Colore\Database\STRING_ASSIGNMENT', '%s = :%s');
 
 class SQLmapper
 {
-    public static function generateSQL($statementInfo)
+    /**
+     * @return (array|string)[]|null
+     *
+     * @psalm-return array{statement: string, arguments: array<string, mixed>}|null
+     */
+    public static function generateSQL(array $statementInfo): array|null
     {
         // If statementInfo is not an array, or if it is missing required fields, then bail
         if (!is_array($statementInfo) || !isset($statementInfo['action']) || !isset($statementInfo['table'])) {

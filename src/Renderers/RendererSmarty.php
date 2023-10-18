@@ -4,13 +4,16 @@ namespace Colore\Renderers;
 
 use Smarty\Smarty;
 use Colore\Logger;
-use Colore\Interfaces\RequestHelper;
-use Colore\Interfaces\RenderHelper;
+use Colore\Interfaces\Adapters\IRequestAdapter;
+use Colore\Interfaces\Providers\IRenderProvider;
 
 require_once 'vendor/autoload.php';
 
-class RendererSmarty implements RenderHelper {
-    public function dispatch(RequestHelper &$cro) {
+class RendererSmarty implements IRenderProvider {
+    /**
+     * @return void
+     */
+    public function dispatch(IRequestAdapter &$cro) {
         /**
          * Create new Smarty object
          */

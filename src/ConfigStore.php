@@ -5,7 +5,7 @@ namespace Colore;
 class ConfigStore {
     protected static $config;
 
-    public static function load($config) {
+    public static function load($config): void {
         self::$config = $config;
     }
 

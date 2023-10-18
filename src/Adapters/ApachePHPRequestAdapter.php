@@ -1,14 +1,14 @@
 <?php
 
-namespace Colore\Helpers;
+namespace Colore\Adapters;
 
-use Colore\Request;
+use Colore\GenericRequestAdapter;
 use Colore\Logger;
-use Colore\Interfaces\RequestHelper;
+use Colore\Interfaces\Adapters\IRequestAdapter;
 
 @session_start();
 
-class ApachePHPRequestHelper extends Request implements RequestHelper {
+class ApachePHPRequestAdapter extends GenericRequestAdapter implements IRequestAdapter {
     protected $request_properties = [];
 
     public function __construct() {
@@ -22,7 +22,7 @@ class ApachePHPRequestHelper extends Request implements RequestHelper {
         }
     }
 
-    public function getContextKey() {
+    public function getContextKey(): string {
         $baseURL = dirname($_SERVER['SCRIPT_NAME']);
 
         Logger::trace('baseUrl: %s', $baseURL);
@@ -57,8 +57,12 @@ class ApachePHPRequestHelper extends Request implements RequestHelper {
 
     /**
      * Get a specific request argument. Returns null if the specified request argument does not exist.
+     *
      * @param string $requestArgumentName
-     * @return multitype:|NULL
+     *
+     * @return (array|string)[]|null|string
+     *
+     * @psalm-return array<int|string, array<int|string, mixed>|string>|null|string
      */
     public function getRequestArgument($requestArgumentName) {
         if (isset($_GET[$requestArgumentName])) {
@@ -70,8 +74,11 @@ class ApachePHPRequestHelper extends Request implements RequestHelper {
 
     /**
      * Sets a request argument.
+     *
      * @param string $requestArgument
      * @param mixed $requestArgumentValue
+     *
+     * @return void
      */
     public function setRequestArgument($requestArgument, $requestArgumentValue) {
         /**
@@ -89,8 +96,12 @@ class ApachePHPRequestHelper extends Request implements RequestHelper {
 
     /**
      * Get a specific request property. Returns null if the specified request property does not exist.
+     *
      * @param string $requestProperty
-     * @return multitype:|NULL
+     *
+     * @return (array|string)[]|null|string
+     *
+     * @psalm-return array<int|string, array<int|string, mixed>|string>|null|string
      */
     public function getRequestProperty($requestProperty) {
         if (isset($_POST[$requestProperty])) {
@@ -102,8 +113,11 @@ class ApachePHPRequestHelper extends Request implements RequestHelper {
 
     /**
      * Sets a request property.
+     *
      * @param string $requestProperty
      * @param mixed $requestValue
+     *
+     * @return void
      */
     public function setRequestProperty($requestProperty, $requestValue) {
         /**
@@ -113,17 +127,21 @@ class ApachePHPRequestHelper extends Request implements RequestHelper {
 
     /**
      * Returns an array containing all of the session properties.
+     *
      * @return array
+     *
+     * @psalm-return array<string, mixed>
      */
-    public function getSessionProperties() {
+    public function getSessionProperties(): array {
         return $_SESSION;
     }
 
     /**
      * Sets a session lifetime.
+     *
      * @param integer $sessionLifetime
      */
-    public function setSessionLifetime($sessionLifetime = 1800) {
+    public function setSessionLifetime($sessionLifetime = 1800): void {
         session_set_cookie_params($sessionLifetime);
     }
 
@@ -142,8 +160,11 @@ class ApachePHPRequestHelper extends Request implements RequestHelper {
 
     /**
      * Sets a session property.
+     *
      * @param string $sessionProperty
      * @param mixed $sessionValue
+     *
+     * @return void
      */
     public function setSessionProperty($sessionProperty, $sessionValue) {
         $_SESSION[$sessionProperty] = $sessionValue;
@@ -151,11 +172,31 @@ class ApachePHPRequestHelper extends Request implements RequestHelper {
 
     /**
      * Sets a session property.
+     *
      * @param string $sessionProperty
+     *
+     * @return void
      */
     public function unsetSessionProperty($sessionProperty) {
         if (isset($_SESSION[$sessionProperty])) {
             unset($_SESSION[$sessionProperty]);
         }
+    }
+
+    /**
+     * Output
+     *
+     * @param mixed Output variable
+     *
+     * @return void
+     */
+    public function output($content, $metadata = [], $status = 200) {
+        http_response_code($status);
+
+        foreach ($metadata as $headerName => $headerValue) {
+            header(sprintf('%s: %s', $headerName, $headerValue));
+        }
+
+        echo $content;
     }
 }

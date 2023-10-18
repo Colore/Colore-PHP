@@ -14,15 +14,11 @@ class Logger {
     private static $basePath = '';
     private static $logLevel = LOG_NOTICE;
 
-    public static function getBasePath() {
-        return self::$basePath;
-    }
-
-    public static function setBasePath($basePath) {
+    public static function setBasePath(string $basePath): void {
         self::$basePath = $basePath;
     }
 
-    protected static function log($messageArgs) {
+    protected static function log(array $messageArgs): void {
         $traceInfo = debug_backtrace()[2];
         $logInfo = debug_backtrace()[1];
 
@@ -53,15 +49,11 @@ class Logger {
         error_log(sprintf('%s - %s: %s', strtoupper($logInfo['function']), $method, $logString));
     }
 
-    public static function getLogLevel() {
-        return self::$logLevel;
-    }
-
-    public static function setLogLevel($logLevel = LOG_NOTICE) {
+    public static function setLogLevel($logLevel = LOG_NOTICE): void {
         self::$logLevel = $logLevel;
     }
 
-    public static function shouldProcess($logLevel) {
+    public static function shouldProcess(int $logLevel): bool {
         return $logLevel <= self::$logLevel;
     }
 
@@ -69,7 +61,10 @@ class Logger {
         return self::shouldProcess(LOG_DEBUG);
     }
 
-    public static function fatal(...$errorMessage) {
+    /**
+     * @return never
+     */
+    public static function fatal(string ...$errorMessage) {
         self::log($errorMessage);
 
         die('A fatal error occured.');
@@ -78,61 +73,27 @@ class Logger {
     //
     // Below are all generated
     //
-    public static function emerg(...$messageArgs) {
-        if (self::shouldProcess(LOG_EMERG)) {
-            self::log($messageArgs);
-        }
-    }
 
-    public static function alert(...$messageArgs) {
-        if (self::shouldProcess(LOG_ALERT)) {
-            self::log($messageArgs);
-        }
-    }
 
-    public static function critical(...$messageArgs) {
+    public static function critical(string ...$messageArgs): void {
         if (self::shouldProcess(LOG_CRIT)) {
             self::log($messageArgs);
         }
     }
 
-    public static function error(...$messageArgs) {
+    public static function error(string ...$messageArgs): void {
         if (self::shouldProcess(LOG_ERR)) {
             self::log($messageArgs);
         }
     }
 
-    public static function warning(...$messageArgs) {
-        if (self::shouldProcess(LOG_WARNING)) {
-            self::log($messageArgs);
-        }
-    }
-
-    public static function notice(...$messageArgs) {
-        if (self::shouldProcess(LOG_NOTICE)) {
-            self::log($messageArgs);
-        }
-    }
-
-    public static function info(...$messageArgs) {
-        if (self::shouldProcess(LOG_INFO)) {
-            self::log($messageArgs);
-        }
-    }
-
-    public static function debug(...$messageArgs) {
+    public static function debug(string ...$messageArgs): void {
         if (self::shouldProcess(LOG_DEBUG)) {
             self::log($messageArgs);
         }
     }
 
-    public static function verbose(...$messageArgs) {
-        if (self::shouldProcess(LOG_VERBOSE)) {
-            self::log($messageArgs);
-        }
-    }
-
-    public static function trace(...$messageArgs) {
+    public static function trace(string ...$messageArgs): void {
         if (self::shouldProcess(LOG_TRACE)) {
             self::log($messageArgs);
         }

@@ -3,9 +3,10 @@
 namespace Colore;
 
 use Colore\Logger;
-use Colore\Interfaces\RequestHelper;
+use Colore\Interfaces\Adapters\IRequestAdapter;
 
-define('\Colore\KV_STRING', '%s: %s');
+const CONTEXT_ADAPTER_INTERFACE = '\\Colore\\Interfaces\\Adapters\\IRequestAdapter';
+const CONTEXT_PROVIDER_INTERFACE = '\\Colore\\Interfaces\\Providers\\IContextProvider';
 
 class Engine {
     /**
@@ -14,17 +15,17 @@ class Engine {
      *
      * @var array
      */
-    private $_objectCache = [];
+    private $objectCache = [];
     /**
      * $_config is the internal configuration store.
      * @var unknown
      */
-    private $_config = [];
+    private $config = [];
     /**
      * $_helpers holds instances of the helpers used to handle a request.
      * @var unknown
      */
-    private $_helpers = [];
+    private $helpers = [];
 
     /**
      * ColoreEngine is initialized with the initial configuration.
@@ -38,30 +39,44 @@ class Engine {
             Logger::fatal('Error initializing Colore configuration');
         }
 
-        $this->_config = $config;
+        $this->config = $config;
+
+        $this->loadContextProvider();
+    }
+
+    /**
+     * Load the context provider(s).
+     *
+     * @return void
+     */
+    private function loadContextProvider() {
+        $contextConfig = $this->config['helpers']['context'];
+
+        $contextHelper = null;
+
+        if (is_string($contextConfig)) {
+            $contextHelper = $this->factory($contextConfig, CONTEXT_PROVIDER_INTERFACE, null);
+        } elseif (is_array($contextConfig) && isset($contextConfig['name']) && isset($contextConfig['args'])) {
+            $contextHelper = $this->factory($this->config['helpers']['context']['name'], CONTEXT_PROVIDER_INTERFACE, $contextConfig['args']); // NOSONAR
+        } else {
+            Logger::error('Failed to find a valid context!');
+        }
+
+        if (is_null($contextHelper)) {
+            Logger::fatal('Failed to acquire context helper');
+        }
+
+        $this->helpers['context'] = $contextHelper;
     }
 
     /**
      * Service handles new requests.
      */
-    public function service() {
-        /**
-         * Load the context helper.
-         */
-        if (!isset($this->_helpers['context'])) {
-            $contextHelper = $this->factory($this->_config['helpers']['context'], '\\Colore\\Interfaces\\ContextHelper');
-
-            if (!$contextHelper) {
-                Logger::fatal('Failed to acquire context helper');
-            }
-
-            $this->_helpers['context'] = $contextHelper;
-        }
-
+    public function service(...$args): void {
         /**
          * Load the request helper.
          */
-        $requestObject = $this->factory($this->_config['helpers']['request'], '\\Colore\\Interfaces\\RequestHelper');
+        $requestObject = $this->factory($this->config['helpers']['request'], CONTEXT_ADAPTER_INTERFACE, ...$args);
 
         if (!$requestObject) {
             Logger::fatal('Failed to acquire request helper');
@@ -70,7 +85,7 @@ class Engine {
         /**
          * Load default render properties into Request Object.
          */
-        $defaultRenderProperties = $this->_config['defaults']['render']['properties'];
+        $defaultRenderProperties = $this->config['defaults']['render']['properties'];
 
         foreach ($defaultRenderProperties as $propName => $propVal) {
             $requestObject->setRenderProperty($propName, $propVal);
@@ -93,9 +108,9 @@ class Engine {
      * Dispatch resolves the request context, loads the context data,
      * imports it into the request object and executes associated logic.
      *
-     * @param RequestHelper $cro
+     * @param IRequestAdapter $cro
      */
-    public function dispatch(RequestHelper &$cro) {
+    public function dispatch(IRequestAdapter &$cro): void {
         Logger::debug('Dispatching');
 
         Logger::debug('Issuing context helpers');
@@ -107,7 +122,7 @@ class Engine {
 
         Logger::debug('Resolving context: [%s]', $contextKey);
 
-        $contextData = $this->_helpers['context']->resolveContext($contextKey);
+        $contextData = $this->helpers['context']->resolveContext($contextKey);
         $contextData['key'] = $contextKey;
 
         Logger::debug('Loading context into Request object...');
@@ -186,9 +201,9 @@ class Engine {
     /**
      * This method is responsible for rendering the request.
      *
-     * @param RequestHelper $cro
+     * @param IRequestAdapter $cro
      */
-    public function render(RequestHelper &$cro) {
+    public function render(IRequestAdapter &$cro): void {
         /**
          * Get the render engine as set in the request.
          */
@@ -230,21 +245,21 @@ class Engine {
         /**
          * If the object is not cached, create the object and save it in the cache.
          */
-        if (!isset($this->_objectCache[$className])) {
-            $this->_objectCache[$className] = new $className();
+        if (!isset($this->objectCache[$className])) {
+            $this->objectCache[$className] = new $className();
         }
 
         /**
          * Check if the cached object matched the specified class name. Bail on failure.
          */
-        if (!is_a($this->_objectCache[$className], $className)) {
+        if (!is_a($this->objectCache[$className], $className)) {
             Logger::fatal('getCachedObject/Could not instantiate class: [%s]', $className);
         }
 
         /**
          * Return the object from the cache.
          */
-        return $this->_objectCache[$className];
+        return $this->objectCache[$className];
     }
 
     /**
@@ -256,7 +271,7 @@ class Engine {
      *
      * @return object
      */
-    public function factory($className, $classInterface) {
+    public function factory($className, $classInterface, ...$args) {
         Logger::debug('making %s', $className);
 
         /**
@@ -269,7 +284,7 @@ class Engine {
         /**
          * Create a new instance of the specified class name.
          */
-        $objectClass = new $className();
+        $objectClass = is_array($args) ? new $className(...$args) : new $className($args);
 
         /**
          * If the created instance does not implement the specified class interface, then bail.

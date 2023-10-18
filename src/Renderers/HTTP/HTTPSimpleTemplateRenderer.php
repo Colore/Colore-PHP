@@ -1,20 +1,22 @@
 <?php
 
-namespace Colore\Renderers;
+namespace Colore\Renderers\HTTP;
 
 use Colore\Logger;
-use Colore\Interfaces\RequestHelper;
-use Colore\Interfaces\RenderHelper;
+use Colore\Interfaces\Adapters\IRequestAdapter;
+use Colore\Interfaces\Providers\IRenderProvider;
 
-class SimpleOutput implements RenderHelper {
-    public function dispatch(RequestHelper &$cro) {
+class HTTPSimpleTemplateRenderer implements IRenderProvider {
+    /**
+     * @return void
+     */
+    public function dispatch(IRequestAdapter &$cro) {
         $template = $cro->getRenderPath();
         $template_file = sprintf('%s/%s', BASEDIR, $template);
 
         $renderProperties = $cro->getRenderProperties();
 
         // Hold the variable in the template variable.
-        $template = [];
 
         Logger::debug('Setting render properties [%d]', count($renderProperties));
 
@@ -26,6 +28,17 @@ class SimpleOutput implements RenderHelper {
 
         $template['context'] = $cro->getContextKey();
 
+        $httpHeaders = $cro->getRenderArgument('httpHeaders') ?? [];
+        $httpStatusCode = $cro->getRenderArgument('httpStatusCode') ?? 200;
+
+        ob_start();
+
         require_once $template_file; // NOSONAR
+
+        $ob = ob_get_contents();
+
+        ob_end_clean();
+
+        $cro->output($ob, $httpHeaders, $httpStatusCode);
     }
 }
