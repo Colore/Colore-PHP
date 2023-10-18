@@ -5,8 +5,8 @@ namespace Colore;
 use Colore\Logger;
 use Colore\Interfaces\Adapters\IRequestAdapter;
 
-const CONTEXT_ADAPTER_INTERFACE = '\\Colore\\Interfaces\\Adapters\\IRequestAdapter';
-const CONTEXT_PROVIDER_INTERFACE = '\\Colore\\Interfaces\\Providers\\IContextProvider';
+use const Colore\Constants\CONTEXT_ADAPTER_INTERFACE;
+use const Colore\Constants\CONTEXT_PROVIDER_INTERFACE;
 
 class Engine {
     /**
