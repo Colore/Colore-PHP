@@ -33,6 +33,7 @@ class PHPContextProvider implements IContextProvider {
                 substr($requested_context, 0, strlen($context_handle)) == $context_handle &&
                 strlen($context_handle) > strlen($lookup_result)
             ) {
+                $lookup_result = $context_handle;
             }
         }
 

@@ -11,12 +11,12 @@ class HTTPOutputSimpleTemplate implements IRenderProvider {
      * @return void
      */
     public function dispatch(IRequestAdapter &$cro) {
-        $template = $cro->getRenderPath();
-        $template_file = sprintf('%s/%s', BASEDIR, $template);
+        $template_file = sprintf('%s/%s', BASEDIR, $cro->getRenderPath());
 
         $renderProperties = $cro->getRenderProperties();
 
-        // Hold the variable in the template variable.
+        // Hold the template variables in the template variable.
+        $template = [];
 
         Logger::debug('Setting render properties [%d]', count($renderProperties));
 
