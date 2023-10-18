@@ -1,6 +1,6 @@
 <?php
 
-namespace Colore\Renderers;
+namespace Colore\Renderers\Smarty;
 
 use Smarty\Smarty;
 use Colore\Logger;
@@ -9,7 +9,7 @@ use Colore\Interfaces\Providers\IRenderProvider;
 
 require_once 'vendor/autoload.php';
 
-class RendererSmarty implements IRenderProvider {
+class SimpleSmartyRenderer implements IRenderProvider {
     /**
      * @return void
      */
@@ -48,6 +48,6 @@ class RendererSmarty implements IRenderProvider {
         /**
          * Render (display) the result.
          */
-        $smarty->display($template);
+        $cro->output($smarty->fetch($template));
     }
 }
