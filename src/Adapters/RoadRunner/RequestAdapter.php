@@ -1,42 +1,41 @@
 <?php
 
-namespace Colore\Adapters;
+namespace Colore\Adapters\RoadRunner;
 
-use Colore\GenericRequestAdapter;
 use Colore\Logger;
+use Colore\GenericRequestAdapter;
+
+use Spiral\RoadRunner\Http\PSR7Worker;
+use Psr\Http\Message\ServerRequestInterface;
+
 use Colore\Interfaces\Adapters\IRequestAdapter;
+use Colore\Providers\InMemory\SimpleSessionProvider;
+use Nyholm\Psr7\Response;
 
-use OpenSwoole\Http\Request;
-use OpenSwoole\Http\Response;
-use Colore\Providers\InMemorySessionProvider;
+const SESSION_COOKIE_NAME = 'COLORE_OPENSWOOLE_SESSION_ID';
 
-class OpenSwooleRequestAdapter extends GenericRequestAdapter implements IRequestAdapter {
+class RequestAdapter extends GenericRequestAdapter implements IRequestAdapter {
     protected $request_properties = [];
 
-    private Request $request;
-    private Response $response;
+    private ServerRequestInterface $request;
+    private array $response;
+    private PSR7Worker $worker;
+    private SimpleSessionProvider $session;
 
-    public function __construct(Request &$request, Response &$response) {
+    public function __construct(ServerRequestInterface &$request, PSR7Worker &$worker) {
         $this->request = $request;
-        $this->response = $response;
+        $this->worker = $worker;
+        $this->response = ['cookies' => [], 'headers' => []];
 
         $sessionCookie = null;
 
-        if (isset($this->request->cookie['COLORE_OPENSWOOLE_SESSION_ID'])) {
-            $sessionCookie = $this->request->cookie['COLORE_OPENSWOOLE_SESSION_ID'];
+        if (isset($this->request->cookies[SESSION_COOKIE_NAME])) {
+            $sessionCookie = $this->request->cookies[SESSION_COOKIE_NAME];
         }
 
-        $this->session = InMemorySessionProvider::getSession($sessionCookie);
+        $this->session = SimpleSessionProvider::getSession($sessionCookie);
 
-        $this->response->cookie(
-            'COLORE_OPENSWOOLE_SESSION_ID',
-            $this->session->getSessionId(),
-            time() + 1800,
-            '/',
-            $request->header['host'],
-            false,
-            true
-        );
+        $this->setCookie(time() + 1800, '/', $request->header['host'], false, true);
     }
 
     public function getContextKey() {
@@ -136,15 +135,7 @@ class OpenSwooleRequestAdapter extends GenericRequestAdapter implements IRequest
      * @param integer $sessionLifetime
      */
     public function setSessionLifetime($sessionLifetime = 1800): void {
-        $this->response->cookie(
-            'COLORE_OPENSWOOLE_SESSION_ID',
-            $this->session->getSessionId(),
-            time() + $sessionLifetime,
-            '/',
-            $this->request->header['host'],
-            false,
-            true
-        );
+        $this->setCookie(time() + $sessionLifetime, '/', $this->request->header['host'], false, true);
     }
 
     /**
@@ -185,6 +176,43 @@ class OpenSwooleRequestAdapter extends GenericRequestAdapter implements IRequest
         }
     }
 
+    private function setCookie($expiryTime, $cookiePath, $domain, $secure, $httpOnly) {
+        $this->response['cookies'][SESSION_COOKIE_NAME] = [
+            'value' => $this->session->getSessionId(),
+            'expiry' => $expiryTime,
+            'path' => $cookiePath,
+            'domain' => $domain,
+            'secure' => $secure,
+            'httpOnly' => $httpOnly
+        ];
+    }
+
+    private function generateCookie($cookieName, $cookieData) {
+        $cookieStr = sprintf('%s=%s;', $cookieName, $cookieData['value']);
+
+        if (isset($cookieData['expiry'])) {
+            $cookieStr += sprintf(' Expires=%s GMT;', date('D, d M o H:i:s', $cookieData['expiry']));
+        }
+
+        if (isset($cookieData['domain'])) {
+            $cookieStr += sprintf(' Domain=%s;', $cookieData['domain']);
+        }
+
+        if (isset($cookieData['path'])) {
+            $cookieStr += sprintf(' Path=%s;', $cookieData['path']);
+        }
+
+        if (isset($cookieData['secure']) && boolval($cookieData['secure'])) {
+            $cookieStr += ' SecureOnly;';
+        }
+
+        if (isset($cookieData['httpOnly']) && boolval($cookieData['httpOnly'])) {
+            $cookieStr += ' HttpOnly;';
+        }
+
+        return $cookieStr;
+    }
+
     /**
      * Output
      *
@@ -193,12 +221,14 @@ class OpenSwooleRequestAdapter extends GenericRequestAdapter implements IRequest
      * @return void
      */
     public function output($content, $metadata = [], $status = 200) {
-        $this->response->status($status);
+        $headers = $this->response['headers'];
 
-        foreach ($metadata as $headerName => $headerValue) {
-            $this->response->header($headerName, $headerValue);
+        if (!empty($this->response['cookies'])) {
+            foreach ($this->response['cookies'] as $cookieName => $cookieData) {
+                array_push($headers, sprintf('Set-Cookie: %s', $this->generateCookie($cookieName, $cookieData)));
+            }
         }
 
-        $this->response->end($content);
+        $this->worker->respond(new Response($status, $headers, $content));
     }
 }

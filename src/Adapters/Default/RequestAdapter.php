@@ -1,6 +1,6 @@
 <?php
 
-namespace Colore\Adapters;
+namespace Colore\Adapters\Default;
 
 use Colore\GenericRequestAdapter;
 use Colore\Logger;
@@ -8,7 +8,7 @@ use Colore\Interfaces\Adapters\IRequestAdapter;
 
 @session_start();
 
-class ApachePHPRequestAdapter extends GenericRequestAdapter implements IRequestAdapter {
+class RequestAdapter extends GenericRequestAdapter implements IRequestAdapter {
     protected $request_properties = [];
 
     public function __construct() {

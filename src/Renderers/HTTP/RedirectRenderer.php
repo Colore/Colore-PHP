@@ -6,7 +6,7 @@ use Colore\Logger;
 use Colore\Interfaces\Adapters\IRequestAdapter;
 use Colore\Interfaces\Providers\IRenderProvider;
 
-class HTTPRedirectRenderer implements IRenderProvider {
+class RedirectRenderer implements IRenderProvider {
     /**
      * @return void
      */

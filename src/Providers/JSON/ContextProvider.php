@@ -1,11 +1,11 @@
 <?php
 
-namespace Colore\Providers;
+namespace Colore\Providers\JSON;
 
 use Colore\Logger;
 use Colore\Interfaces\Providers\IContextProvider;
 
-class JSONContextProvider implements IContextProvider {
+class ContextProvider implements IContextProvider {
     /**
      * @return void
      */

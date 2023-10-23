@@ -1,11 +1,11 @@
 <?php
 
-namespace Colore\Providers;
+namespace Colore\Providers\InMemory;
 
 use Colore\Interfaces\Providers\IContextProvider;
 use Colore\Logger;
 
-class PHPContextProvider implements IContextProvider {
+class SimpleContextProvider implements IContextProvider {
     protected $config;
 
     public function __construct($config) {

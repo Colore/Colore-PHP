@@ -2,14 +2,13 @@
 
 namespace Colore\Renderers\Smarty;
 
-use Smarty\Smarty;
 use Colore\Logger;
 use Colore\Interfaces\Adapters\IRequestAdapter;
 use Colore\Interfaces\Providers\IRenderProvider;
 
 require_once 'vendor/autoload.php';
 
-class SimpleSmartyRenderer implements IRenderProvider {
+class SimpleRenderer implements IRenderProvider {
     /**
      * @return void
      */
@@ -17,7 +16,7 @@ class SimpleSmartyRenderer implements IRenderProvider {
         /**
          * Create new Smarty object
          */
-        $smarty = new Smarty();
+        $smarty = new \Smarty();
 
         /**
          * Get the template file from the assigned render path.

@@ -1,41 +1,32 @@
 <?php
 
-namespace Colore\Renderers;
+namespace Colore\Renderers\HTTP\JSON;
 
 use Colore\Logger;
 use Colore\Interfaces\Adapters\IRequestAdapter;
 use Colore\Interfaces\Providers\IRenderProvider;
 
-class HTTPOutputSimpleTemplate implements IRenderProvider {
+class DataRenderer implements IRenderProvider {
     /**
      * @return void
      */
     public function dispatch(IRequestAdapter &$cro) {
-        $template_file = sprintf('%s/%s', BASEDIR, $cro->getRenderPath());
+        $outputProperties = [];
 
         $renderProperties = $cro->getRenderProperties();
-
-        // Hold the template variables in the template variable.
-        $template = [];
 
         Logger::debug('Setting render properties [%d]', count($renderProperties));
 
         foreach ($renderProperties as $propName => $propVal) {
             Logger::debug('Setting render property [%s] to [%s]', $propName, $propVal);
 
-            $template[$propName] = $propVal;
+            $outputProperties[$propName] = $propVal;
         }
 
-        $template['context'] = $cro->getContextKey();
+        $httpStatusCode = $cro->getRenderArgument('httpStatusCode') ?? 200;
 
-        ob_start();
+        $output = json_encode($outputProperties);
 
-        require_once $template_file; // NOSONAR
-
-        $ob = ob_get_contents();
-
-        ob_end_clean();
-
-        $cro->output($ob);
+        $cro->output($output, ['Content-Type' => 'application/json'], $httpStatusCode);
     }
 }

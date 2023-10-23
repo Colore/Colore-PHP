@@ -1,12 +1,12 @@
 <?php
 
-namespace Colore\Renderers\HTTP;
+namespace Colore\Renderers\Buffered;
 
 use Colore\Logger;
 use Colore\Interfaces\Adapters\IRequestAdapter;
 use Colore\Interfaces\Providers\IRenderProvider;
 
-class HTTPSimpleTemplateRenderer implements IRenderProvider {
+class SimpleTemplateRenderer implements IRenderProvider {
     /**
      * @return void
      */
@@ -28,9 +28,6 @@ class HTTPSimpleTemplateRenderer implements IRenderProvider {
 
         $template['context'] = $cro->getContextKey();
 
-        $httpHeaders = $cro->getRenderArgument('httpHeaders') ?? [];
-        $httpStatusCode = $cro->getRenderArgument('httpStatusCode') ?? 200;
-
         ob_start();
 
         require_once $template_file; // NOSONAR
@@ -39,6 +36,6 @@ class HTTPSimpleTemplateRenderer implements IRenderProvider {
 
         ob_end_clean();
 
-        $cro->output($ob, $httpHeaders, $httpStatusCode);
+        $cro->output($ob);
     }
 }

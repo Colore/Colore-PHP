@@ -10,7 +10,7 @@
     },
     "helpers": {
         "context": {
-            "name": "\\Colore\\Providers\\PHPContextProvider",
+            "name": "\\Colore\\Providers\\InMemory\\SimpleContextProvider",
             "args": {
                 "contexts": {
                     "/api/joke/random": {
@@ -22,7 +22,7 @@
                             }
                         ],
                         "render": {
-                            "engine": "\\Colore\\Renderers\\HTTP\\JSON\\HTTPJSONRenderer",
+                            "engine": "\\Colore\\Renderers\\HTTP\\JSON\\DataRenderer",
                             "path": "",
                             "properties": {
                                 "joke": "I'd tell you a UDP joke, but you wouldn't get."
@@ -38,7 +38,7 @@
                             }
                         ],
                         "render": {
-                            "engine": "\\Colore\\Renderers\\HTTP\\JSON\\HTTPJSONRenderer",
+                            "engine": "\\Colore\\Renderers\\HTTP\\JSON\\DataRenderer",
                             "path": "",
                             "properties": {
                                 "joke": "I'd tell you a UDP joke, but you wouldn't get."
@@ -54,7 +54,7 @@
                             }
                         ],
                         "render": {
-                            "engine": "\\Colore\\Renderers\\HTTP\\JSON\\HTTPJSONRenderer",
+                            "engine": "\\Colore\\Renderers\\HTTP\\JSON\\DataRenderer",
                             "path": "",
                             "properties": {
                                 "message": "Default context render property."
@@ -74,7 +74,7 @@
                             }
                         ],
                         "render": {
-                            "engine": "\\Colore\\Renderers\\HTTP\\JSON\\HTTPJSONRenderer",
+                            "engine": "\\Colore\\Renderers\\HTTP\\JSON\\DataRenderer",
                             "path": "",
                             "properties": {}
                         }
@@ -83,7 +83,7 @@
                         "properties": [],
                         "logic": [],
                         "render": {
-                            "engine": "\\Colore\\Renderers\\HTTP\\HTTPSimpleTemplateRenderer",
+                            "engine": "\\Colore\\Renderers\\HTTP\\SimpleTemplateRenderer",
                             "arguments": {
                                 "path": "templates/default.php"
                             },
@@ -97,7 +97,7 @@
                         "properties": [],
                         "logic": [],
                         "render": {
-                            "engine": "\\Colore\\Renderers\\HTTP\\HTTPSimpleTemplateRenderer",
+                            "engine": "\\Colore\\Renderers\\HTTP\\SimpleTemplateRenderer",
                             "arguments": {
                                 "path": "templates/error.php"
                             },
@@ -110,6 +110,6 @@
                 }
             }
         },
-        "request": "\\Colore\\Adapters\\ApachePHPRequestAdapter"
+        "request": "\\Colore\\Adapters\\Default\\RequestAdapter"
     }
 }

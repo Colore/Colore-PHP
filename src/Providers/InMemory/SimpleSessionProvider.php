@@ -1,11 +1,11 @@
 <?php
 
-namespace Colore\Providers;
+namespace Colore\Providers\InMemory;
 
 use Colore\Logger;
 use Ramsey\Uuid\Uuid;
 
-class InMemorySessionProvider {
+class SimpleSessionProvider {
     protected static $gcInterval = 900;
     protected static $gcLastRun = 0;
 
@@ -44,7 +44,7 @@ class InMemorySessionProvider {
             self::runGC();
         }
 
-        return new InMemorySessionProvider($sessionId);
+        return new SimpleSessionProvider($sessionId);
     }
 
     public function getSessionId() {
