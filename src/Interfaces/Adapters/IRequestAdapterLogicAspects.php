@@ -7,6 +7,10 @@ interface IRequestAdapterLogicAspects {
 
     public function doException();
 
+    public function appendLogic(array $logic);
+
+    public function insertLogic(array $logic);
+
     public function getLogic();
 
     public function getNextLogic();

@@ -54,10 +54,36 @@ Yeah. Try the ping example and go see for yourself!
 
 As Colore is currently still in development, it's not yet available from `composer`.
 
-But if you want to get a feel for it, check the `examples/ping` folder for a bare minumum amount of viable code.
+But if you want to get a feel for it, check the `examples/ping` folder or any of the other examples for some examples of minumum amount of viable code.
 
-To run the example
+To run the `ping` example
 
 -   install the dependencies with `composer install`
 -   run the `./docker-ping-example.sh`
 -   open the example on `http://localhost:8765/`
+
+### Concepts
+
+Colore's flow is compartmentalized and can be broken down into the following aspects:
+
+| Role                       | Function                                                                                                                                                                                                                                                                      |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Execution Environment (EE) | E.g. Apache with mod_php                                                                                                                                                                                                                                                      |
+| Entrypoint                 | This is the code that provides initial execution and bootstrapping the Engine.                                                                                                                                                                                                |
+| Engine (CE)                | The Colore Engine orchestrates request handling.                                                                                                                                                                                                                              |
+| Request Adapter (RA)       | Once the request is dispatched by the entrypoint, the Adapter is initialized from the EE. The CE will then resolve the context through the RA. The RA is then consequently injected into Logic calls as a means to provide a consistent, unified abstraction layer to the EE. |
+| Providers                  | Providers provide the RA and CE with EE agnostic functionality to look up contexts and provide other helpful functionality.                                                                                                                                                   |
+| Logic                      | Aspect "Controllers" that provide separated layers of functionality, akin to middleware.                                                                                                                                                                                      |
+| Renderers                  | They transform the render properties into something that can then be outputted back to the client through the RA.                                                                                                                                                             |
+
+#### Adapters
+
+Adapters provide an adaptive interface to the (outside) Execution Environment.
+
+#### Providers
+
+Providers provide informational services, like context resolution.
+
+### Notes
+
+At the time Colore was originally conceived, Node hadn't been created yet and Symphony had not come out with the Runtime environment.

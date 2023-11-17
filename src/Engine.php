@@ -118,7 +118,7 @@ class Engine {
         /**
          * Get Request Context
          */
-        $contextKey = $cro->getContextKey();
+        $contextKey = $cro->getRequestContext();
 
         Logger::debug('Resolving context: [%s]', $contextKey);
 

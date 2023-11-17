@@ -22,7 +22,7 @@ class RequestAdapter extends GenericRequestAdapter implements IRequestAdapter {
         }
     }
 
-    public function getContextKey(): string {
+    public function getRequestContext(): string {
         $baseURL = dirname($_SERVER['SCRIPT_NAME']);
 
         Logger::trace('baseUrl: %s', $baseURL);
@@ -67,6 +67,10 @@ class RequestAdapter extends GenericRequestAdapter implements IRequestAdapter {
     public function getRequestArgument($requestArgumentName) {
         if (isset($_GET[$requestArgumentName])) {
             return $_GET[$requestArgumentName];
+        }
+
+        if (isset($this->requestArguments[$requestArgumentName])) {
+            return $this->requestArguments[$requestArgumentName];
         }
 
         return null;

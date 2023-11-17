@@ -5,14 +5,11 @@ namespace Colore;
 use Colore\Interfaces\Adapters\IRequestAdapter;
 
 trait TGRAContextAspects {
-    protected $contextKey = '';
-    protected $context = [];
-
     /**
      * Get the key of the current context
      * @return Returns the current context key
      */
-    public function getContextKey() {
+    public function getRequestContext() {
         return $this->contextKey;
     }
 
@@ -27,6 +24,10 @@ trait TGRAContextAspects {
 
         // Load context information
         $this->context = $contextData;
+
+        if (isset($this->context['arguments'])) {
+            $this->requestArguments = $this->context['arguments'];
+        }
 
         if (!isset($this->context['render']['arguments'])) {
             $this->context['render']['arguments'] = [];
@@ -57,8 +58,6 @@ trait TGRAContextAspects {
 }
 
 trait TGRALogicAspects {
-    protected $exceptionState = false;
-
     public function hasException() {
         return $this->exceptionState;
     }
@@ -89,7 +88,7 @@ trait TGRALogicAspects {
     public function getNextLogic() {
         // If we have a non-empty preempt_logic list, merge it into the logic list
         if (isset($this->context['preempt_logic']) && count($this->context['preempt_logic'])) {
-            while (count($this->context['preempt_logic'])) {
+            while (!empty($this->context['preempt_logic'])) {
                 array_unshift($this->context['logic'], array_pop($this->context['preempt_logic']));
             }
         }
@@ -109,7 +108,11 @@ trait TGRALogicAspects {
      * @return void
      */
     public function appendLogic(array $logic) {
-        $this->context['logic'][] = $logic;
+        if (is_array($logic)) {
+            $this->context['logic'] = array_merge($this->context['logic'], $logic);
+        } else {
+            $this->context['logic'][] = $logic;
+        }
     }
 
     /**
@@ -127,14 +130,16 @@ trait TGRALogicAspects {
 
         // Add logic to preempt list
         if (isset($logic['class']) && isset($logic['method'])) {
-            array_push($this->context['preempt_logic'], $logic);
+            if (is_array($logic)) {
+                $this->context['preempt_logic'] = array_merge($this->context['preempt_logic'], $logic);
+            } else {
+                $this->context['preempt_logic'][] = $logic;
+            }
         }
     }
 }
 
 trait TGRAMagicAspects {
-    protected $requestVariables = [];
-
     /**
      * Magic overload getter. Returns the requestVariable value or null.
      * @param string $requestVariable
@@ -176,8 +181,6 @@ trait TGRAMagicAspects {
 }
 
 trait TGRARenderAspects {
-    protected $renderProperties = [];
-
     /**
      * Get the render arguments. These are settings for the renderer.
      *
@@ -302,9 +305,6 @@ trait TGRARenderAspects {
 }
 
 trait TGRARequestAspects {
-    protected $requestArguments = [];
-    protected $requestProperties = [];
-
     /**
      * Returns an array containing all of the request arguments.
      * @return array
@@ -373,8 +373,6 @@ trait TGRARequestAspects {
 }
 
 trait TGRASessionAspects {
-    protected $sessionProperties = [];
-
     /**
      * Returns an array containing all of the session properties.
      * @return array
@@ -423,6 +421,15 @@ trait TGRASessionAspects {
 }
 
 abstract class GenericRequestAdapter implements IRequestAdapter {
+    protected $contextKey = '';
+    protected $context = [];
+    protected $exceptionState = false;
+    protected $requestVariables = [];
+    protected $renderProperties = [];
+    protected $requestArguments = [];
+    protected $requestProperties = [];
+    protected $sessionProperties = [];
+
     use TGRAContextAspects;
     use TGRALogicAspects;
     use TGRAMagicAspects;

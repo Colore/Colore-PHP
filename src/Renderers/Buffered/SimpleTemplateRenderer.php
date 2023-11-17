@@ -26,7 +26,7 @@ class SimpleTemplateRenderer implements IRenderProvider {
             $template[$propName] = $propVal;
         }
 
-        $template['context'] = $cro->getContextKey();
+        $template['context'] = $cro->getRequestContext();
 
         ob_start();
 

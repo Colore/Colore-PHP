@@ -37,4 +37,6 @@ interface IRequestAdapterSessionAspects {
      * @return void
      */
     public function unsetSessionProperty($sessionProperty);
+
+    public function setSessionLifetime($sessionLifetime);
 }

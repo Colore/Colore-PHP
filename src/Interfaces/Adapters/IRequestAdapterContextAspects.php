@@ -3,7 +3,7 @@
 namespace Colore\Interfaces\Adapters;
 
 interface IRequestAdapterContextAspects {
-    public function getContextKey();
+    public function getRequestContext();
 
     public function loadContext($contextData);
 }
